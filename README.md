@@ -1,2 +1,19 @@
-# small-enterprise-network
-Designed and implemented a small enterprise network using Cisco Packet Tracer with VLAN segmentation, inter-VLAN routing, DHCP, NAT/PAT, DNS, and basic troubleshooting.
+# Small Enterprise Network Infrastructure
+
+## Overview
+
+## Network Topology
+
+## Network Design
+
+## Technologies
+
+## Configuration
+
+## Testing & Verification
+
+## Troubleshooting
+
+## Skills Demonstrated
+
+## Future Improvements
