@@ -66,13 +66,13 @@ The completed network was verified through:
 ```
 PC-IT-01
    ↓
-192.168.20.1       ✓ Gateway
+192.168.20.1       (Gateway)
    ↓
-203.0.113.6        ✓ Server
+203.0.113.6        (Server)
    ↓
-server.company.local  ✓ DNS
+server.company.local  (DNS)
    ↓
-HTTP Server        ✓
+HTTP Server        
 
 ## Troubleshooting
 
