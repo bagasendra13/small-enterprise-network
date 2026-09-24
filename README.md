@@ -6,7 +6,7 @@ The project demonstrates VLAN segmentation, 802.1Q trunking, Router-on-a-Stick i
 
 ## Network Topology
 
-
+(topology/network-topology.png)
 
 
 ## Network Design
