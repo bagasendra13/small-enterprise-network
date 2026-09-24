@@ -9,10 +9,10 @@
 - PC-IT-02 → Fa0/4 → VLAN 20
 
 ## Trunk
-
+```
 SW1 G0/1
       ↓
 802.1Q trunk
       ↓
 R1 G0/0
-
+```
