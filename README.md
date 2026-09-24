@@ -6,24 +6,8 @@ The project demonstrates VLAN segmentation, 802.1Q trunking, Router-on-a-Stick i
 
 ## Network Topology
 
-                    ┌──────────────┐
-                    │    Server    │
-                    │ 203.0.113.6  │
-                    │  DNS / HTTP  │
-                    └──────┬───────┘
-                           │
-                          ISP
-                           │
-                          R1
-                    Router-on-a-Stick
-                       /         \
-                  VLAN 10       VLAN 20
-                  Finance          IT
-                     \             /
-                      \           /
-                           SW1
-                      /    |    |    \
-                    PC1   PC2  PC3   PC4
+           <img width="519" height="520" alt="image" src="https://github.com/user-attachments/assets/a1232e8d-3ae3-4006-aeec-596f25d74006" />
+
 
 ## Network Design
 
