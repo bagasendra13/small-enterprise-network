@@ -6,7 +6,29 @@ The project demonstrates VLAN segmentation, 802.1Q trunking, Router-on-a-Stick i
 
 ## Network Topology
 
-![](topology/network-topology.png)
+![Network Topology](topology/network-topology.png)
+
+## Project Architecture
+
+### R1
+- Router-on-a-Stick
+- Inter-VLAN routing
+- DHCP
+- NAT/PAT
+- Default route
+
+### SW1
+- VLAN 10 — Finance
+- VLAN 20 — IT
+- 802.1Q trunk
+
+### ISP
+- WAN connectivity
+- Connection between R1 and Server network
+
+### Server
+- DNS
+- HTTP
 
 
 ## Network Design
