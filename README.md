@@ -63,7 +63,7 @@ The completed network was verified through:
 - HTTP access
 
 ### Example
-
+```
 PC-IT-01
    ↓
 192.168.20.1       ✓ Gateway
@@ -91,7 +91,7 @@ Identify Root Cause
 Apply Fix
    ↓
 Verify
-
+```
 Examples documented in this project include:
 
 - Incorrect VLAN assignment
@@ -101,14 +101,14 @@ Examples documented in this project include:
 See documentation/troubleshooting.md for details.
 
 ## Repository Structure
-
+```
 ├── README.md
 ├── small-enterprise-network.pkt
 ├── topology/
 ├── configs/
 ├── documentation/
 └── screenshots/
-
+```
 ## Skills Demonstrated
 
 - IPv4 addressing and subnetting
@@ -134,9 +134,5 @@ Potential extensions:
 - Network redundancy
 - Dynamic routing
 - Network monitoring
-
-## Project Status
-
-**Completed**
 
 Detailed addressing, VLAN design, configurations, verification evidence, and troubleshooting documentation are available in the repository.
