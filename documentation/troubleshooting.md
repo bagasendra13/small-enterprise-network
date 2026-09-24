@@ -1,356 +1,378 @@
-\# Network Troubleshooting
+# Network Troubleshooting
 
- Troubleshooting was performed using an evidence-based approach rather than immediately changing the configuration.
+Troubleshooting was performed using an evidence-based approach rather than immediately changing the configuration.
 
- \## Troubleshooting Methodology
+## Troubleshooting Methodology
 
- \`\`\`text\
- Symptom\
- ↓\
- Collect Evidence\
- ↓\
- Form Hypothesis\
- ↓\
- Test\
- ↓\
- Identify Root Cause\
- ↓\
- Apply Fix\
- ↓\
- Verify\
- \`\`\`
+```text
+Symptom
+   ↓
+Collect Evidence
+   ↓
+Form Hypothesis
+   ↓
+Test
+   ↓
+Identify Root Cause
+   ↓
+Apply Fix
+   ↓
+Verify
+```
 
- The main goal was to identify the fault domain before making configuration changes.
+The main goal was to identify the fault domain before making configuration changes.
 
- \## Scenario 1 — Incorrect VLAN Assignment
+---
 
- \### Symptom
+## Scenario 1 — Incorrect VLAN Assignment
 
- The user reported that PC-FIN-01 could not ping its Finance gateway.
+### Symptom
 
- Expected:
+The user reported that PC-FIN-01 could not ping its Finance gateway.
 
- \`\`\`text\
- PC-FIN-01\
- 192.168.10.x\
- ↓\
- VLAN 10\
- ↓\
- 192.168.10.1\
- Finance Gateway\
- \`\`\`
+### Expected
 
- \### Investigation
+```text
+PC-FIN-01
+192.168.10.x
+      ↓
+VLAN 10
+      ↓
+192.168.10.1
+Finance Gateway
+```
 
- The first verification command was:
+### Investigation
 
- \`\`\`cisco\
- show vlan brief\
- \`\`\`
+The first verification command was:
 
- The output showed that Fa0/1 was assigned to VLAN 20 instead of VLAN 10.
+```cisco
+show vlan brief
+```
 
- Observed:
+The output showed that Fa0/1 was assigned to VLAN 20 instead of VLAN 10.
 
- \`\`\`text\
- VLAN 10 → Fa0/2\
- VLAN 20 → Fa0/1, Fa0/3, Fa0/4\
- \`\`\`
+### Observed
 
- \### Root Cause
+```text
+VLAN 10 → Fa0/2
+VLAN 20 → Fa0/1, Fa0/3, Fa0/4
+```
 
- Fa0/1 had an incorrect access VLAN assignment.
+### Root Cause
 
- The port was configured for VLAN 20 even though PC-FIN-01 belonged to Finance and should have been connected to VLAN 10.
+Fa0/1 had an incorrect access VLAN assignment.
 
- \### Resolution
+The port was configured for VLAN 20 even though PC-FIN-01 belonged to Finance and should have been connected to VLAN 10.
 
- Fa0/1 was assigned back to VLAN 10.
+### Resolution
 
- ##\# Verification
+Fa0/1 was assigned back to VLAN 10.
 
- PC-FIN-01 was then able to successfully reach:
+### Verification
 
- \`\`\`text\
- 192.168.10.1\
- \`\`\`
+PC-FIN-01 was then able to successfully reach:
 
- \### Lesson Learned
+```text
+192.168.10.1
+```
 
- `show vlan brief` is an important first-level verification command for identifying incorrect VLAN membership on access ports.
+### Lesson Learned
 
- \## Scenario 8 — DNS Configuration
+`show vlan brief` is an important first-level verification command for identifying incorrect VLAN membership on access ports.
 
- \### Symptom
+---
 
- A PC could reach the server by IP address but could not resolve:
+## Scenario 8 — DNS Configuration
 
- \`\`\`text\
- server.company.local\
- \`\`\`
+### Symptom
 
- \### Investigation
+A PC could reach the server by IP address but could not resolve:
 
- The DHCP configuration was inspected using:
+```text
+server.company.local
+```
 
- \`\`\`cisco\
- show running-config | section dhcp\
- \`\`\`
+### Investigation
 
- The DHCP configuration was initially providing:
+The DHCP configuration was inspected using:
 
- \`\`\`text\
- dns-server 8.8.8.8\
- \`\`\`
+```cisco
+show running-config | section dhcp
+```
 
- ##\# Root Cause
+The DHCP configuration was initially providing:
 
- The clients were receiving an external DNS server instead of the DNS server deployed in the lab.
+```text
+dns-server 8.8.8.8
+```
 
- The intended DNS server was:
+### Root Cause
 
- \`\`\`text\
- 203.0.113.6\
- \`\`\`
+The clients were receiving an external DNS server instead of the DNS server deployed in the lab.
 
- \### Resolution
+The intended DNS server was:
 
- The DHCP pools were updated to provide:
+```text
+203.0.113.6
+```
 
- \`\`\`text\
- dns-server 203.0.113.6\
- \`\`\`
+### Resolution
 
- The clients then renewed their DHCP leases.
+The DHCP pools were updated to provide:
 
- \### Verification
+```text
+dns-server 203.0.113.6
+```
 
- The client received:
+The clients then renewed their DHCP leases.
 
- \`\`\`text\
- DNS: 203.0.113.6\
- \`\`\`
+### Verification
 
- DNS resolution was tested with:
+The client received:
 
- \`\`\`text\
- ping server.company.local\
- \`\`\`
+```text
+DNS: 203.0.113.6
+```
 
- The hostname successfully resolved to:
+DNS resolution was tested with:
 
- \`\`\`text\
- 203.0.113.6\
- \`\`\`
+```text
+ping server.company.local
+```
 
- \### Lesson Learned
+The hostname successfully resolved to:
 
- When troubleshooting hostname connectivity, IP connectivity and DNS resolution should be tested separately.
+```text
+203.0.113.6
+```
 
- A successful ping to an IP address does not automatically prove that DNS resolution is working.
+### Lesson Learned
 
- \## Scenario 10 — End-to-End Connectivity Investigation
+When troubleshooting hostname connectivity, IP connectivity and DNS resolution should be tested separately.
 
- \### Symptom
+A successful ping to an IP address does not automatically prove that DNS resolution is working.
 
- A user reported that PC-IT-01 could not access:
+---
 
- \`\`\`text\
- server.company.local\
- \`\`\`
+## Scenario 10 — End-to-End Connectivity Investigation
 
- \### Investigation
+### Symptom
 
- The investigation started at the access layer and moved toward the server.
+A user reported that PC-IT-01 could not access:
 
- \### 1. VLAN Membership
+```text
+server.company.local
+```
 
- Command:
+### Investigation
 
- \`\`\`cisco\
- show vlan brief\
- \`\`\`
+The investigation started at the access layer and moved toward the server.
 
- Finding:
+### 1. VLAN Membership
 
- \`\`\`text\
- Fa0/3 → VLAN 20\
- \`\`\`
+Command:
 
- This was correct because PC-IT-01 is connected to Fa0/3.
+```cisco
+show vlan brief
+```
 
- \### 2. Switch Port Status
+Finding:
 
- Command:
+```text
+Fa0/3 → VLAN 20
+```
 
- \`\`\`cisco\
- show interfaces status\
- \`\`\`
+This was correct because PC-IT-01 is connected to Fa0/3.
 
- Finding:
+### 2. Switch Port Status
 
- \`\`\`text\
- Fa0/3 → connected\
- VLAN 20\
- \`\`\`
+Command:
 
- The access port was operational and correctly assigned.
+```cisco
+show interfaces status
+```
 
- \### 3. Trunk
+Finding:
 
- Command:
+```text
+Fa0/3 → connected
+VLAN 20
+```
 
- \`\`\`cisco\
- show interfaces trunk\
- \`\`\`
+The access port was operational and correctly assigned.
 
- Finding:
+### 3. Trunk
 
- \`\`\`text\
- G0/1 → trunking\
- 802.1Q\
- VLAN 20 → allowed\
- VLAN 20 → active\
- VLAN 20 → forwarding\
- \`\`\`
+Command:
 
- The VLAN was successfully traversing the trunk between SW1 and R1.
+```cisco
+show interfaces trunk
+```
 
- \### 4. Router Interface
+Finding:
 
- Command:
+```text
+G0/1 → trunking
+802.1Q
+VLAN 20 → allowed
+VLAN 20 → active
+VLAN 20 → forwarding
+```
 
- \`\`\`cisco\
- show ip interface brief\
- \`\`\`
+The VLAN was successfully traversing the trunk between SW1 and R1.
 
- Finding:
+### 4. Router Interface
 
- \`\`\`text\
- G0/0.20\
- 192.168.20.1\
- up/up\
- \`\`\`
+Command:
 
- The VLAN 20 gateway was operational.
+```cisco
+show ip interface brief
+```
 
- \### 5. Routing
+Finding:
 
- Command:
+```text
+G0/0.20
+192.168.20.1
+up/up
+```
 
- \`\`\`cisco\
- show ip route\
- \`\`\`
+The VLAN 20 gateway was operational.
 
- The routing table contained:
+### 5. Routing
 
- \`\`\`text\
- 192.168.20.0/24 → connected\
- 203.0.113.0/30 → connected\
- 0.0.0.0/0 → 203.0.113.1\
- \`\`\`
+Command:
 
- The required routes were present.
+```cisco
+show ip route
+```
 
- \## End-to-End Testing
+The routing table contained:
 
- From PC-IT-01:
+```text
+192.168.20.0/24 → connected
+203.0.113.0/30  → connected
+0.0.0.0/0       → 203.0.113.1
+```
 
- \`\`\`text\
- ping 192.168.20.1\
- \`\`\`
+The required routes were present.
 
- Result:
+---
 
- \`\`\`text\
- Successful\
- \`\`\`
+## End-to-End Testing
 
- Server connectivity:
+### Gateway Connectivity
 
- \`\`\`text\
- ping 203.0.113.6\
- \`\`\`
+From PC-IT-01:
 
- Result:
+```text
+ping 192.168.20.1
+```
 
- \`\`\`text\
- Successful\
- \`\`\`
+Result:
 
- DNS resolution:
+```text
+Successful
+```
 
- \`\`\`text\
- ping server.company.local\
- \`\`\`
+### Server Connectivity
 
- Result:
+From PC-IT-01:
 
- \`\`\`text\
- Successful\
- \`\`\`
+```text
+ping 203.0.113.6
+```
 
- HTTP access was also tested using:
+Result:
 
- \`\`\`text\
- http://203.0.113.6\
- \`\`\`
+```text
+Successful
+```
 
- The server web page was successfully displayed.
+### DNS Resolution
 
- ### Finding
+From PC-IT-01:
 
- No network fault was identified.
+```text
+ping server.company.local
+```
 
- The VLAN, access port, trunk, Router-on-a-Stick gateway, routing, DNS resolution, and HTTP service were functioning correctly.
+Result:
 
- \### Lesson Learned
+```text
+Successful
+```
 
- A troubleshooting engineer should not assume that every reported problem is caused by a network failure.
+### HTTP Access
 
- The correct approach is to collect evidence, test each layer, and determine whether the reported fault can actually be reproduced.
+HTTP access was also tested using:
 
- \## NAT Verification
+```text
+http://203.0.113.6
+```
 
- NAT/PAT was also verified using:
+The server web page was successfully displayed.
 
- \`\`\`cisco\
- show ip nat statistics\
- show ip nat translations\
- \`\`\`
+### Finding
 
- Initially, the translation table contained no entries because there was no active NAT traffic.
+No network fault was identified.
 
- After generating traffic from a Finance client to the server, NAT translations appeared.
+The VLAN, access port, trunk, Router-on-a-Stick gateway, routing, DNS resolution, and HTTP service were functioning correctly.
 
- Example:
+### Lesson Learned
 
- | Inside Local | Inside Global |\
- |---|---|\
- | 192.168.10.3 | 203.0.113.2 |
+A troubleshooting engineer should not assume that every reported problem is caused by a network failure.
 
- This demonstrated that R1 was translating the private client address to the WAN interface address using NAT overload.
+The correct approach is to collect evidence, test each layer, and determine whether the reported fault can actually be reproduced.
 
- \## Troubleshooting Commands Used
+---
 
- | Command | Purpose |\
- |---|---|\
- | `show vlan brief` | Verify VLAN membership |\
- | `show interfaces status` | Verify switch port status and VLAN |\
- | `show interfaces trunk` | Verify trunk operation |\
- | `show ip interface brief` | Verify router interfaces |\
- | `show ip route` | Verify routing |\
- | `show running-config` | Inspect current configuration |\
- | `show running-config \| section dhcp` | Inspect DHCP configuration |\
- | `show ip dhcp binding` | Verify DHCP leases |\
- | `show ip nat translations` | Verify active NAT translations |\
- | `show ip nat statistics` | Verify NAT statistics |
+## NAT Verification
 
- \## Troubleshooting Approach
+NAT/PAT was also verified using:
 
- The troubleshooting process emphasized:
+```cisco
+show ip nat statistics
+show ip nat translations
+```
 
- - Evidence collection before configuration changes
+Initially, the translation table contained no entries because there was no active NAT traffic.
+
+After generating traffic from a Finance client to the server, NAT translations appeared.
+
+### Example
+
+| Inside Local | Inside Global |
+|---|---|
+| 192.168.10.3 | 203.0.113.2 |
+
+This demonstrated that R1 was translating the private client address to the WAN interface address using NAT overload.
+
+---
+
+## Troubleshooting Commands Used
+
+| Command | Purpose |
+|---|---|
+| `show vlan brief` | Verify VLAN membership |
+| `show interfaces status` | Verify switch port status and VLAN |
+| `show interfaces trunk` | Verify trunk operation |
+| `show ip interface brief` | Verify router interfaces |
+| `show ip route` | Verify routing |
+| `show running-config` | Inspect current configuration |
+| `show running-config \| section dhcp` | Inspect DHCP configuration |
+| `show ip dhcp binding` | Verify DHCP leases |
+| `show ip nat translations` | Verify active NAT translations |
+| `show ip nat statistics` | Verify NAT statistics |
+
+---
+
+## Troubleshooting Approach
+
+The troubleshooting process emphasized:
+
+- Evidence collection before configuration changes
 - Layer-by-layer investigation
 - Hypothesis testing
 - Verification after remediation
